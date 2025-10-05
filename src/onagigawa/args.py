@@ -1,14 +1,20 @@
 import argparse
 
 
-def parse(args: list[str]):
+def parse(args: list[str]) -> argparse.Namespace:
+    """Parse command line arguments.
+    """
     parser = argparse.ArgumentParser(description="onagigawa")
     parser.add_argument("-v", "--verbose", action="store_true")
-    subparsers = parser.add_subparsers(help="subcommand help")
+    subparsers = parser.add_subparsers(help="subcommand help", dest='subcommand')
 
     pr_parser = subparsers.add_parser("pr", help="get pull requests")
     pr_parser.add_argument("organization", help="organization")
     pr_parser.add_argument("repository", help="repository")
+    pr_parser.add_argument(
+        "output",
+        help="Write the fetched pull requests to this file in JSON line format.",
+    )
     pr_parser.add_argument(
         "--size",
         help="# of pull requests that a response from GItHub API contains.",
@@ -21,9 +27,6 @@ def parse(args: list[str]):
         default="1",
         type=int,
     )
-    pr_parser.add_argument(
-        "destination",
-        help="Write the fetched pull requests to this file in JSON line format.",
-    )
+
 
     return parser.parse_args(args)
