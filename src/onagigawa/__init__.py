@@ -1,6 +1,5 @@
+import onagigawa.args
 
 
-
-
-def temp():
-    pass
+def main():
+    onagigawa.args.parse([])

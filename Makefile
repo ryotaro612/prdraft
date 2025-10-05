@@ -1,12 +1,11 @@
 
 ##@ Run
-dataset/train.jsonl: dataset/source.csv
-	uv run --active ./src/blanketml/finetuning.py dataset/source.csv dataset/train.jsonl
+
 
 ##@ Clean
 .PHONY: clean
 clean: ## Clean up generated files.
-	rm -f dataset/train.jsonl
+	rm -f .venv
 
 ##@ Help
 help: ## Display this help.
