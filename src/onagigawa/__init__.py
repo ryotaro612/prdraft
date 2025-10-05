@@ -9,7 +9,7 @@ def main():
 
     args = onagigawa.args.parse(sys.argv[1:])
 
-    if args.logging:
+    if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
 
     if isinstance(args, pr.Args):

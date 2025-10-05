@@ -1,11 +1,23 @@
 
+
+pr_file ?= dataset/pr.jsonl
+
 ##@ Run
+$(pr_file): .env .venv/bin/onagigawa ## Fetch pull requests.
+	uv run onagigawa --env-file=.env onagigawa --verbose pr alpdr data-platform $(pr_file)
 
 
 ##@ Clean
 .PHONY: clean
 clean: ## Clean up generated files.
 	rm -f .venv
+
+.env:
+	echo "Set a GitHub API token to ONAGIGAWA_GITHUB_API_KEY"
+
+.venv/bin/onagigawa:
+	uv sync
+
 
 ##@ Help
 help: ## Display this help.

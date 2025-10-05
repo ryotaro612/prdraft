@@ -37,6 +37,9 @@ def run(args: Args) -> int:
     prev = args.offset
     rtn_code = 0
     while True:
+        logging.debug(
+            f"Fetching page prev: {prev} num of fetched pull requests: {len(result)}"
+        )
         pull_requests = _get_pull_request(
             args.organization, args.repository, os.environ[key], prev, args.size
         )
