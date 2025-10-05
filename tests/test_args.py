@@ -1,5 +1,5 @@
 import unittest
-from onagigawa.args import *
+import onagigawa
 
 
 class ArgsTest(unittest.TestCase):

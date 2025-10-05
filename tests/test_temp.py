@@ -1,8 +1,10 @@
 import unittest
-import onagigawa.args
+import sys
+
+# import onagigawa.args
 
 
 class TestTemp(unittest.TestCase):
     def test_temp(self):
         """A temporary test case"""
-        pass
+        print(sys.path)
