@@ -13,4 +13,5 @@ def main():
         logging.basicConfig(level=logging.DEBUG)
 
     if isinstance(args, pr.Args):
-        pr.run(args)
+        if pr.run(args):
+            sys.exit(1)
