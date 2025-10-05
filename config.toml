@@ -1,0 +1,39 @@
+instruction = "# 指示\n## fewshotのために論文と要約のペアが与えられます。fewshotの例にならって要約してください。\n## 規則\n- 文末を常体にしてください。\n- 箇条書を避けてください。\n - markdownの見出しの利用を避けてください。\n - 数式をKaTeX表記で出力してください。\n ## 指示\n 以上の規則にしたがって要約してください。"
+
+# [posts.bert]
+# paper = "/home/ryotaro/blanket-lm/dataset/papers/bert.pdf"
+# ja = "/home/ryotaro/website/content/posts/bert.ja.md"
+
+# [posts.scaling-instruction-finetuned-language-models]
+# paper = "/home/ryotaro/blanket-lm/dataset/papers/designing_access_methods.pdf"
+# ja = "/home/ryotaro/website/content/posts/scaling-instruction-finetuned-language-models.ja.md"
+
+[posts.reading-wikipedia-to-answer-open-domain-questions]
+paper = "/home/ryotaro/blanket-lm/dataset/papers/reading-wikipedia-to-answer-open-domain-questions.pdf"
+ja = "/home/ryotaro/website/content/posts/reading-wikipedia-to-answer-open-domain-questions.ja.md"
+
+[posts.consistent-hashing-and-random-trees-distributed-caching-protocols-for-relieving-hot-spots-on-the-world-wide-web]
+paper = "/home/ryotaro/blanket-lm/dataset/papers/consistent-hashing-and-random-trees-distributed-caching-protocols-for-relieving-hot-spots-on-the-world-wide-web.pdf"
+ja = "/home/ryotaro/website/content/posts/consistent-hashing-and-random-trees-distributed-caching-protocols-for-relieving-hot-spots-on-the-world-wide-web.ja.md"
+
+[posts.supervised-learning-of-universal-sentence-representations-from-natural-language-inference-data]
+paper = "/home/ryotaro/blanket-lm/dataset/papers/supervised-learning-of-universal-sentence-representations-from-natural-language-inference-data.pdf"
+ja = "/home/ryotaro/website/content/posts/supervised-learning-of-universal-sentence-representations-from-natural-language-inference-data.ja.md"
+
+[posts.coverage-is-not-strongly-correlated-with-test-suite-effectiveness]
+paper = "/home/ryotaro/blanket-lm/dataset/papers/coverage-is-not-strongly-correlated-with-test-suite-effectiveness.pdf"
+ja = "/home/ryotaro/website/content/posts/coverage-is-not-strongly-correlated-with-test-suite-effectiveness.ja.md"
+
+[posts.realm-retrieval-augmented-language-model-pre-training]
+paper = "/home/ryotaro/blanket-lm/dataset/papers/realm-retrieval-augmented-language-model-pre-training.pdf"
+ja = "/home/ryotaro/website/content/posts/REALM-retrieval-augmented-language-model-pre-training.ja.md"
+
+[posts.policy-gradient-methods-for-reinforcement-learning-with-function-approximation]
+paper = "/home/ryotaro/blanket-lm/dataset/papers/policy-gradient-methods-for-reinforcement-learning-with-function-approximation.pdf"
+ja = "/home/ryotaro/website/content/posts/policy-gradient-methods-for-reinforcement-learning-with-function-approximation.ja.md"
+
+# /home/ryotaro/website/content/posts/scaling-instruction-finetuned-language-models.ja.md,/home/ryotaro/blanket-lm/dataset/papers/scaling-instruction-finetuned-language-models.pdf
+# /home/ryotaro/website/content/posts/on-the-fly-garbage-collection-an-exercise-in-cooperation.ja.md,/home/ryotaro/blanket-lm/dataset/papers/on-the-fly-garbage-collection-an-exercise-in-cooperation.pdf
+# /home/ryotaro/website/content/posts/highly-available-transactions-virtues-and-limitations.ja.md,/home/ryotaro/blanket-lm/dataset/papers/highly-available-transactions-virtues-and-limitations.pdf
+# /home/ryotaro/website/content/posts/distributed-graphlab-a-framework-for-machine-learning-and-data-mining-in-the-cloud.ja.md,/home/ryotaro/blanket-lm/dataset/papers/distributed-graphlab-a-framework-for-machine-learning-and-data-mining-in-the-cloud.pdf
+# /home/ryotaro/website/content/posts/policy-gradient-methods-for-reinforcement-learning-with-function-approximation.ja.md,/home/ryotaro/blanket-lm/dataset/papers/policy-gradient-methods-for-reinforcement-learning-with-function-approximation.pdf
