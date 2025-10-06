@@ -2,6 +2,7 @@ import sys
 import logging
 import onagigawa.args
 import onagigawa.pr as pr
+import onagigawa.patch as patch
 
 
 def main():
@@ -12,6 +13,7 @@ def main():
     if args.verbose:
         logging.basicConfig(level=logging.DEBUG)
 
-    if isinstance(args, pr.Args):
-        if pr.run(args):
-            sys.exit(1)
+    if args.subcommand == "pr" and isinstance(args, pr.Args):
+        sys.exit(pr.run(args))
+    elif args.subcommand == "patch" and isinstance(args, patch.Args):
+        sys.exit(patch.run(args))
