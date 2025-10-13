@@ -12,7 +12,22 @@ class Args(typing.Protocol):
 
 
 def run(args: Args) -> int:
-    """Create pairs of pull requests and diffs."""
+    """Create pairs of pull requests and diffs.
+
+
+            3072
+
+            DuckDB v1.4.1 (Andium)
+        Enter ".help" for usage hints.
+        D create table pull_request (commit_hash , embedding vec float[3072])
+
+
+    https://duckdb.org/docs/stable/core_extensions/vss.html
+
+            serve ollama
+            phi4-mini
+            https://python.langchain.com/api_reference/community/vectorstores/langchain_community.vectorstores.duckdb.DuckDB.html#langchain_community.vectorstores.duckdb.DuckDB
+    """
     if not os.path.exists(args.dir):
         os.makedirs(args.dir)
 
