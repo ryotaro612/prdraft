@@ -26,6 +26,20 @@ def parse(args: list[str]) -> argparse.Namespace:
         default="1",
         type=int,
     )
+
+    # metadata subcommand
+    import_parser = subparsers.add_parser(
+        "metadata", help="import pull requests from a JSONL file."
+    )
+    import_parser.add_argument(
+        "pullrequests", help="a JSONL file that the pr subcommand outputs."
+    )
+    import_parser.add_argument(
+        "repository",
+        help="Git repository path containing the pull requests from the pr file.",
+    )
+    import_parser.add_argument("metadata", help="output")
+
     # patch subcommand
     patch_parser = subparsers.add_parser(
         "patch",
@@ -39,8 +53,6 @@ def parse(args: list[str]) -> argparse.Namespace:
         "repository",
         help="Git repository path containing the pull requests from the pr file",
     )
-    patch_parser.add_argument(
-        "dir", help="Output directory for generated pairs"
-    )
+    patch_parser.add_argument("dir", help="Output directory for generated pairs")
 
     return parser.parse_args(args)
