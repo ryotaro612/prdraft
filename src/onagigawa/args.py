@@ -40,19 +40,14 @@ def parse(args: list[str]) -> argparse.Namespace:
     )
     diff_parser.add_argument("metadata", help="output")
 
-    # patch subcommand
-    patch_parser = subparsers.add_parser(
-        "patch",
-        help="create pairs of pull requests and diffs",
+    # embed subcommand
+    embed_parser = subparsers.add_parser(
+        "embed", help="generate embeddings for pull requests."
     )
-    patch_parser.add_argument(
-        "pr", help="JSON Lines file containing pull request data (from pr subcommand)"
+    embed_parser.add_argument("pr", help="a JSONL file that the pr subcommand outputs.")
+    embed_parser.add_argument(
+        "diff", help="a JSONL file that the diff subcommand outputs."
     )
-
-    patch_parser.add_argument(
-        "repository",
-        help="Git repository path containing the pull requests from the pr file",
-    )
-    patch_parser.add_argument("dir", help="Output directory for generated pairs")
+    embed_parser.add_argument("db", help="a DuckDB database file to store embeddings.")
 
     return parser.parse_args(args)
