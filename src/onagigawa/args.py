@@ -27,18 +27,18 @@ def parse(args: list[str]) -> argparse.Namespace:
         type=int,
     )
 
-    # metadata subcommand
-    import_parser = subparsers.add_parser(
-        "metadata", help="import pull requests from a JSONL file."
+    # diff subcommand
+    diff_parser = subparsers.add_parser(
+        "diff", help="generate diffs for pull requests."
     )
-    import_parser.add_argument(
+    diff_parser.add_argument(
         "pullrequests", help="a JSONL file that the pr subcommand outputs."
     )
-    import_parser.add_argument(
+    diff_parser.add_argument(
         "repository",
         help="Git repository path containing the pull requests from the pr file.",
     )
-    import_parser.add_argument("metadata", help="output")
+    diff_parser.add_argument("metadata", help="output")
 
     # patch subcommand
     patch_parser = subparsers.add_parser(

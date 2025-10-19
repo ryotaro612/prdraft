@@ -3,7 +3,7 @@ import logging
 import onagigawa.args
 import onagigawa.pr as pr
 import onagigawa.patch as patch
-import onagigawa.importpr as importpr
+import onagigawa.metadata as metadata
 
 
 def main():
@@ -16,7 +16,10 @@ def main():
 
     if args.subcommand == "pr" and isinstance(args, pr.Args):
         sys.exit(pr.run(args))
-    if args.subcommand == "importpr" and isinstance(args, importpr.Args):
-        sys.exit(importpr.run(args))
+    if args.subcommand == "diff" and isinstance(args, metadata.Args):
+        sys.exit(metadata.run(args))
     elif args.subcommand == "patch" and isinstance(args, patch.Args):
         sys.exit(patch.run(args))
+    else:
+        logging.error("Unknown subcommand: %s", args.subcommand)
+        sys.exit(1)
