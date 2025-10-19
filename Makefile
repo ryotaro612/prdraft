@@ -2,11 +2,15 @@
 
 pr_file ?= dataset/pr.jsonl
 
+embedding_db ?= dataset/embedding.duckdb
+
 ##@ Run
 $(pr_file): .env .venv/bin/onagigawa ## Fetch pull requests.
 	mkdir -p $(shell dirname $(pr_file))
 	uv run  --env-file=.env onagigawa --verbose pr alpdr data-platform $(pr_file)
 
+$(embedding_db): $(pr_file) ## Create embedding db
+	duckdb $(embedding_db) < src/migration/000_init.sql
 
 ##@ Clean
 .PHONY: clean
