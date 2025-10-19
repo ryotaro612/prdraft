@@ -1,0 +1,3 @@
+prompt="""
+main との差分を調べ、プルリクエストの本文を`.github/PULL_REQUEST_TEMPLATE.md`の形式で作成してください。
+"""
