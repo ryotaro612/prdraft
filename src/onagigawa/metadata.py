@@ -3,6 +3,7 @@ import logging
 import duckdb
 import git
 import json
+import onagigawa.pull_request as pr
 
 
 @typing.runtime_checkable
@@ -12,38 +13,14 @@ class Args(typing.Protocol):
     metadata: str
 
 
-class PullRequest:
-    """"""
-
-    def __init__(self, raw: dict):
-        """"""
-        self._raw = raw
-
-    def merged(self) -> bool:
-        """"""
-        return True if self._raw.get("merged_at", False) else False
-
-    @property
-    def head_sha(self) -> typing.Optional[str]:
-        """"""
-        return self._raw["head"]["sha"]
-
-    @property
-    def base_sha(self) -> typing.Optional[str]:
-        """"""
-        return self._raw["base"]["sha"]
-
-
 def run(args: Args):
     repo = git.Repo(args.repository)
     with open(args.pullrequests, "r") as f:
-        pull_requests: list[PullRequest] = [
-            PullRequest(json.loads(line)) for line in f.readlines()
-        ]
+        pull_requests = [pr.PullRequest(json.loads(line)) for line in f.readlines()]
 
     pull_request_summaries = []
     for pull_request in pull_requests:
-        if not pull_request.merged():
+        if not pull_request.merged:
             continue
         head = pull_request.head_sha
         base = pull_request.base_sha

@@ -46,7 +46,7 @@ def parse(args: list[str]) -> argparse.Namespace:
     )
     embed_parser.add_argument("pr", help="a JSONL file that the pr subcommand outputs.")
     embed_parser.add_argument(
-        "diff", help="a JSONL file that the diff subcommand outputs."
+        "repository", help="a JSONL file that the diff subcommand outputs."
     )
     embed_parser.add_argument("db", help="a DuckDB database file to store embeddings.")
 

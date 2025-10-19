@@ -2,7 +2,7 @@ import sys
 import logging
 import onagigawa.args
 import onagigawa.pr as pr
-import onagigawa.patch as patch
+import onagigawa.embed as embed
 import onagigawa.metadata as metadata
 
 
@@ -18,8 +18,8 @@ def main():
         sys.exit(pr.run(args))
     if args.subcommand == "diff" and isinstance(args, metadata.Args):
         sys.exit(metadata.run(args))
-    elif args.subcommand == "patch" and isinstance(args, patch.Args):
-        sys.exit(patch.run(args))
+    if args.subcommand == "embed" and isinstance(args, embed.Args):
+        sys.exit(embed.run(args))
     else:
         logging.error("Unknown subcommand: %s", args.subcommand)
         sys.exit(1)
