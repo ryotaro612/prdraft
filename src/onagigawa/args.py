@@ -50,4 +50,9 @@ def parse(args: list[str]) -> argparse.Namespace:
     )
     embed_parser.add_argument("db", help="a DuckDB database file to store embeddings.")
 
+    # mcp subcommand
+    mcp_parser = subparsers.add_parser("mcp")
+    mcp_parser.add_argument("repository")
+    mcp_parser.add_argument("db")
+
     return parser.parse_args(args)

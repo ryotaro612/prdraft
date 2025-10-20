@@ -67,15 +67,6 @@ class Diff:
 
             return (b_path, diff)
 
-    # a_path: str | None
-    # b_path: str | None
-    # diff: str | None
-    # change_type: typing.Literal["A", "D", "C", "M", "R", "T", "U"]
-    # copied_file: bool
-    # deleted_file: bool
-    # renamed_file: bool
-    # new_file: bool
-
 
 def get_diff(repo: git.Repo, start_sha: str, end_sha: str) -> list[Diff]:
     change_types: list[typing.Literal["A", "D", "C", "M", "R", "T", "U"] | None] = [
