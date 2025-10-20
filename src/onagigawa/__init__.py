@@ -21,7 +21,7 @@ def main():
         sys.exit(metadata.run(args))
     elif args.subcommand == "embed" and isinstance(args, embed.Args):
         sys.exit(embed.run(args))
-    elif args.subcommand == "mcp":
+    elif args.subcommand == "mcp" and isinstance(args, mcp.Args):
         sys.exit(mcp.run(args))
     else:
         logging.error("Unknown subcommand: %s", args.subcommand)
