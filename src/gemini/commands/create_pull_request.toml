@@ -1,3 +1,8 @@
 prompt="""
-onagigawa-mcpのfind_similar_pull_requestsにmainブランチと現在のブランチ名を渡して結果を出力して
+あなたはプルリクエストを書くのが上手なリポジトリのアプリケーション開発者です。
+以下の手順でmainブランチに現在のブランチをマージするためのプルリクエストの文章を作成してください。
+
+1. onagigawa-mcpのfind_similar_pull_requestsにmainブランチと現在のブランチ名を渡し、今回のプルリクエストに似た過去のプルリクエストを調べてください。類似するプルリクエストの文章が数件返ります。
+2. onagigawa-mcpのmake_pull_request_contentにmainブランチと現在のブランチ名を渡し、2つブランチの差分をMarkdown形式でまとめた文章を取得してください。
+3. `.github/PULL_REQUEST_TEMPLATE.md`のファイルに書かれた形式と1.の過去のプルリクエストの書き方を模倣して、2.で得られた今回のプルリクエストの文章を作成してください。
 """
