@@ -8,3 +8,8 @@ class TestInterpretCommandLineArguments(unittest.TestCase):
         res = args.parse(["init", "prdraft.db"])
         self.assertEqual("init", res.subcommand)
         self.assertEqual("prdraft.db", res.database)
+        self.assertFalse(res.verbose, "verbose is off by default")
+
+    def test_verbose_mode_is_available(self):
+        res = args.parse(["--verbose", "init", "prdraft.db"])
+        self.assertTrue(res.verbose)
