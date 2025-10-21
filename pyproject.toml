@@ -16,6 +16,7 @@ dependencies = [
 [project.scripts]
 # package.module:func
 onagigawa= "onagigawa:main"
+prdraft= "prdraft:main"
 [tool.pyright]
 
 [tool.setuptools]
