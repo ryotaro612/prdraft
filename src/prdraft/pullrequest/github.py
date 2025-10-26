@@ -1,4 +1,5 @@
 import requests
+import json
 
 
 class PullRequest:
@@ -32,6 +33,10 @@ class PullRequest:
     def base_sha(self) -> str:
         """"""
         return self._raw["base"]["sha"]
+
+    def json(self) -> str:
+        """"""
+        return json.dumps(self._raw, ensure_ascii=False)
 
 
 class PullRequests:
