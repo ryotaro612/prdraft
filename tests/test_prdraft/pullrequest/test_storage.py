@@ -2,7 +2,6 @@ import unittest
 import uuid
 import duckdb
 import tempfile
-import prdraft.init as init
 import prdraft
 import prdraft.pullrequest.storage as storage
 
@@ -34,6 +33,7 @@ class PullRequestStorageTest(unittest.TestCase):
                     {"uid": uid},
                 )
 
-            with storage.pull_request_storage(db) as pr_storage:
+            with duckdb.connect(database=db) as conn:
+                pr_storage = storage.PullRequestStorageClient(conn)
                 num = pr_storage.count("owner", "repo")
                 self.assertEqual(2, num)

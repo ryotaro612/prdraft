@@ -1,13 +1,18 @@
-import typing
+import duckdb
 import logging
 import prdraft.args as args
-from prdraft.pullrequest import pull_request_storage, get_pull_requests, PullRequests
+from prdraft.pullrequest import (
+    PullRequestStorageClient,
+    get_pull_requests,
+    PullRequests,
+)
 
 
 def run(cmd_args: args.PrFetchArgs) -> int:
     """"""
     args = _Args(cmd_args)
-    with pull_request_storage(args.database()) as pr_storage:
+    with duckdb.connect(args.database()) as conn:
+        pr_storage = PullRequestStorageClient(conn)
         n_pull_requests: int = pr_storage.count(args.owner(), args.repository())
         per_page = 30
         page = n_pull_requests // per_page
