@@ -20,8 +20,24 @@ def run(args: Args) -> int:
     conn: duckdb.DuckDBPyConnection | None = None
     try:
         conn = duckdb.connect(database=args.database)
-        upgrade.add_migration_table(conn)
+        _init_db(conn)
     finally:
         if conn:
             conn.close()
     return 0
+
+
+def _init_db(conn: duckdb.DuckDBPyConnection) -> None:
+    conn.execute(
+        """
+    create table if not exists migration (
+        migration_id INTEGER PRIMARY KEY,
+        applied_at timestamptz not null default current_timestamp
+    );
+    """
+    )
+    conn.execute(
+        """
+    begin transaction; insert into migration(migration_id) values(0); commit;
+"""
+    )
