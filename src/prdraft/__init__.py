@@ -18,6 +18,6 @@ def _main(arguments: list[str]) -> int:
     if options.subcommand == "init" and isinstance(options, init.Args):
         return_code = init.run(options)
     else:
-        logging.error("unknown subcommand: %s", options.subcommand)
-        return_code = 1
+        args.parse(["--help"])
+        return 0
     return return_code

@@ -2,6 +2,7 @@ import typing
 import logging
 import os.path
 import duckdb
+import prdraft.upgrade as upgrade
 
 
 @typing.runtime_checkable
@@ -19,6 +20,7 @@ def run(args: Args) -> int:
     conn: duckdb.DuckDBPyConnection | None = None
     try:
         conn = duckdb.connect(database=args.database)
+        upgrade.upgrade(conn)
     finally:
         if conn:
             conn.close()

@@ -10,6 +10,8 @@ dependencies = [
     "langchain>=0.3.27",
     "langchain-ollama>=0.3.10",
     "mcp>=1.18.0",
+    # duckdb get_current_timestamp needs pytz
+    "pytz>=2025.2",
     "requests>=2.32.5",
 ]
 
