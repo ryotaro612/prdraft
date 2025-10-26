@@ -24,6 +24,9 @@ def run(cmd_args: args.PrFetchArgs) -> int:
         page = n_pull_requests // per_page
 
         while True:
+            logging.debug(
+                f"""Fetching pull requests on page {page}. per_page={per_page}"""
+            )
             response = get_pull_requests(
                 args.owner(),
                 args.repository(),
@@ -38,7 +41,7 @@ def run(cmd_args: args.PrFetchArgs) -> int:
                 break
             if len(response) == 0:
                 break
-            response.pull_requests()
+            pr_storage.store_if_not_exists(repository_id, response.pull_requests())
             page += 1
 
     return 0

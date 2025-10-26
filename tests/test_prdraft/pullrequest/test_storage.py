@@ -59,7 +59,28 @@ class PullRequestStorageTest(unittest.TestCase):
                 sut = storage.PullRequestStorageClient(conn)
                 sut.store_if_not_exists(
                     repository_id,
-                    [pr.PullRequest({"id": 9}), pr.PullRequest({"id": 2})],
+                    [
+                        pr.PullRequest(
+                            {
+                                "id": 9,
+                                "number": 9,
+                                "title": "PR 9",
+                                "merged_at": None,
+                                "head": {},
+                                "base": {},
+                            }
+                        ),
+                        pr.PullRequest(
+                            {
+                                "id": 2,
+                                "number": 2,
+                                "title": "PR 2",
+                                "merged_at": None,
+                                "head": {},
+                                "base": {},
+                            }
+                        ),
+                    ],
                 )
                 res = conn.execute(
                     """
