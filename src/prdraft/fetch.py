@@ -1,18 +1,27 @@
 import typing
+import prdraft.args as args
 from prdraft.pullrequest.storage import pull_request_storage
 
 
-class Args(typing.Protocol):
-    """Arguments for fetch subcommand."""
-
-    database: str
-    github_repository: str
-    github_api_key: str
-
-
-def run(args: Args) -> int:
-    with pull_request_storage(args.database) as pr_storage:
-        pr_storage
-        ...
+def run(cmd_args: args.PrFetchArgs) -> int:
+    """"""
+    args = _Args(cmd_args)
+    with pull_request_storage(args.database()) as pr_storage:
+        n_exists = pr_storage.count()
 
     return 0
+
+
+class _Args:
+
+    def __init__(self, args: args.PrFetchArgs) -> None:
+        self._args = args
+
+    def owner(self) -> str:
+        return self._args.ghrepo.split("/")[0]
+
+    def repository(self) -> str:
+        return self._args.ghrepo.split("/")[1]
+
+    def database(self) -> str:
+        return self._args.database

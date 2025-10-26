@@ -12,3 +12,5 @@ class _Client:
 
     def __init__(self, conn: duckdb.DuckDBPyConnection):
         self._conn = conn
+
+    def count(self) -> int: ...

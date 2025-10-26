@@ -9,6 +9,7 @@ class InitArgs(typing.Protocol):
 
     verbose: bool
     command: typing.Literal["init"]
+    database: str
 
 
 @typing.runtime_checkable
@@ -17,7 +18,7 @@ class PrFetchArgs(typing.Protocol):
     command: typing.Literal["pr"]
     subcommand: typing.Literal["fetch"]
     database: str
-    github_repository: str
+    ghrepo: str
     github_api_key: str
 
 
@@ -41,7 +42,6 @@ def parse(args: list[str]) -> InitArgs | PrFetchArgs:
         return parsed_args
 
     if parsed_args.command == "pr" and parsed_args.subcommand == "fetch":
-        parsed_args.github_repository = parsed_args.ghrepo
         token = os.getenv("PRDRAFT_GITHUB_TOKEN", None)
         if not token:
             raise ValueError("PRDRAFT_GITHUB_TOKEN environment variable is not set")

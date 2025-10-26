@@ -1,18 +1,10 @@
-import typing
 import logging
 import os.path
 import duckdb
-import prdraft.upgrade as upgrade
+import prdraft.args as args
 
 
-@typing.runtime_checkable
-class Args(typing.Protocol):
-    """Arguments for init subcommand."""
-
-    database: str
-
-
-def run(args: Args) -> int:
+def run(args: args.InitArgs) -> int:
     """if not exists."""
     if os.path.exists(args.database):
         logging.error('database "%s" already exists', args.database)

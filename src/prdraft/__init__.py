@@ -16,7 +16,7 @@ def _main(arguments: list[str]) -> int:
         logging.basicConfig(level=logging.DEBUG)
 
     return_code: int
-    if options.command == "init" and isinstance(options, init.Args):
+    if options.command == "init":
         return_code = init.run(options)
     elif options.command == "pr":
         if options.subcommand == "fetch":

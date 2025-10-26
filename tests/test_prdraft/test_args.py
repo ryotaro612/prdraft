@@ -9,10 +9,8 @@ class TestInterpretCommandLineArguments(unittest.TestCase):
 
     def test_init_is_a_command(self):
         res = args.parse(["init", "prdraft.db"])
-        if isinstance(res, init.Args):
-            self.assertEqual("prdraft.db", res.database)
-        else:
-            self.fail("parsed args is not an instance of init.Args")
+        self.assertEqual("prdraft.db", res.database)
+
         self.assertEqual("init", res.command)
         self.assertFalse(res.verbose, "verbose is off by default")
 
@@ -30,6 +28,6 @@ class TestInterpretCommandLineArguments(unittest.TestCase):
         self.assertFalse(res.verbose)
         self.assertEqual("pr", res.command)
         self.assertEqual("fetch", res.subcommand)
-        self.assertEqual("owner/repo", res.github_repository)
+        self.assertEqual("owner/repo", res.ghrepo)
         self.assertEqual("fake_token", res.github_api_key)
         os.getenv.assert_called_with("PRDRAFT_GITHUB_TOKEN", None)
