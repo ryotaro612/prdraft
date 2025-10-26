@@ -34,6 +34,20 @@ def _init_db(conn: duckdb.DuckDBPyConnection) -> None:
         migration_id INTEGER PRIMARY KEY,
         applied_at timestamptz not null default current_timestamp
     );
+
+    create table if not exists github_repository (
+        repository_id uuid PRIMARY KEY,
+        owner_name varchar not null,
+        repository_name varchar not null,
+        unique(owner_name, repository_name)
+    );
+
+    create table if not exists github_pull_request (
+      repository_id uuid not null,
+      pull_request_id  integer not null,
+      unique(repository_id, pull_request_id),
+      raw json not null
+    );
     """
     )
     conn.execute(
