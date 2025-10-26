@@ -7,7 +7,7 @@ def run(cmd_args: args.PrFetchArgs) -> int:
     """"""
     args = _Args(cmd_args)
     with pull_request_storage(args.database()) as pr_storage:
-        n_exists = pr_storage.count()
+        n_pull_requests: int = pr_storage.count(args.owner(), args.repository())
 
     return 0
 
