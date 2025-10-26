@@ -1,10 +1,20 @@
 import requests
+import typing
 import json
+
+
+class _RawPullRequest(typing.TypedDict):
+    id: int
+    number: int
+    title: str
+    merged_at: str | None
+    head: dict
+    base: dict
 
 
 class PullRequest:
 
-    def __init__(self, raw: dict):
+    def __init__(self, raw: _RawPullRequest):
         self._raw = raw
 
     @property
@@ -41,11 +51,11 @@ class PullRequest:
 
 class PullRequests:
 
-    def __init__(self, response: requests.models.Response):
-        self._response = response
+    def __init__(self, items: list[_RawPullRequest]):
+        self._items = items
 
     def pull_requests(self) -> list[PullRequest]:
-        return [PullRequest(item) for item in self._response.json()]
+        return [PullRequest(item) for item in self._items]
 
     def __len__(self) -> int:
         return len(self.pull_requests())
@@ -71,4 +81,4 @@ def get_pull_requests(
     if resp.status_code != 200:
         return resp
 
-    return PullRequests(resp)
+    return PullRequests(resp.json())
