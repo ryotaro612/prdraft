@@ -1,6 +1,8 @@
 import duckdb
+import uuid
 import logging
 import prdraft.args as args
+import prdraft.repository as repository
 from prdraft.pullrequest import (
     PullRequestStorageClient,
     get_pull_requests,
@@ -12,6 +14,10 @@ def run(cmd_args: args.PrFetchArgs) -> int:
     """"""
     args = _Args(cmd_args)
     with duckdb.connect(args.database()) as conn:
+        repo_storage = repository.RepositoryStorageClient(conn)
+        repository_id: uuid.UUID = repo_storage.save_repository_if_not_exists(
+            args.owner(), args.repository()
+        )
         pr_storage = PullRequestStorageClient(conn)
         n_pull_requests: int = pr_storage.count(args.owner(), args.repository())
         per_page = 30

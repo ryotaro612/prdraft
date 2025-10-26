@@ -7,6 +7,7 @@ class PullRequestStorageClient:
         self._conn = conn
 
     def count(self, owner_name: str, repository_name: str) -> int:
+        """Counts the total number of fetched pull requests for the given repository."""
         result = self._conn.execute(
             """
             SELECT COUNT(g.repository_id) FROM github_pull_request g join github_repository r
