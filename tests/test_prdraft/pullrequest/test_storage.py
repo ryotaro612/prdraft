@@ -61,3 +61,13 @@ class PullRequestStorageTest(unittest.TestCase):
                     repository_id,
                     [pr.PullRequest({"id": 9}), pr.PullRequest({"id": 2})],
                 )
+                res = conn.execute(
+                    """
+                    select 
+                    pull_request_id from github_pull_request
+                    where repository_id = $1 and pull_request_id = 2""",
+                    [repository_id],
+                ).fetchone()
+                if res is None:
+                    self.fail("Expected pull request ID 2 to be found")
+                self.assertEqual(2, res[0])
