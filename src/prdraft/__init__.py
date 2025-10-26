@@ -1,6 +1,7 @@
 import prdraft.args as args
 import logging
 import prdraft.init as init
+import prdraft.fetch as fetch
 import sys
 
 
@@ -15,8 +16,14 @@ def _main(arguments: list[str]) -> int:
         logging.basicConfig(level=logging.DEBUG)
 
     return_code: int
-    if options.subcommand == "init" and isinstance(options, init.Args):
+    if options.command == "init" and isinstance(options, init.Args):
         return_code = init.run(options)
+    elif options.command == "pr":
+        if options.subcommand == "fetch":
+            return_code = fetch.run(options)
+        else:
+            args.parse(["--help"])
+            return 0
     else:
         args.parse(["--help"])
         return 0

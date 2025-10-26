@@ -20,7 +20,7 @@ def run(args: Args) -> int:
     conn: duckdb.DuckDBPyConnection | None = None
     try:
         conn = duckdb.connect(database=args.database)
-        upgrade.upgrade(conn)
+        upgrade.add_migration_table(conn)
     finally:
         if conn:
             conn.close()
