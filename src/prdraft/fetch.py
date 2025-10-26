@@ -1,6 +1,7 @@
 import typing
+import logging
 import prdraft.args as args
-from prdraft.pullrequest.storage import pull_request_storage
+from prdraft.pullrequest import pull_request_storage, get_pull_requests, PullRequests
 
 
 def run(cmd_args: args.PrFetchArgs) -> int:
@@ -8,6 +9,26 @@ def run(cmd_args: args.PrFetchArgs) -> int:
     args = _Args(cmd_args)
     with pull_request_storage(args.database()) as pr_storage:
         n_pull_requests: int = pr_storage.count(args.owner(), args.repository())
+        per_page = 30
+        page = n_pull_requests // per_page
+
+        while True:
+            response = get_pull_requests(
+                args.owner(),
+                args.repository(),
+                args.github_api_token(),
+                page,
+                per_page,
+            )
+            if not isinstance(response, PullRequests):
+                logging.error(
+                    f"Failed to fetch pull requests. status code is {response.status_code}. json is {response.text}"
+                )
+                break
+            if len(response) == 0:
+                break
+            response.pull_requests()
+            page += 1
 
     return 0
 
@@ -25,3 +46,6 @@ class _Args:
 
     def database(self) -> str:
         return self._args.database
+
+    def github_api_token(self) -> str:
+        return self._args.github_api_key

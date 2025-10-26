@@ -42,13 +42,21 @@ class PullRequests:
     def pull_requests(self) -> list[PullRequest]:
         return [PullRequest(item) for item in self._response.json()]
 
+    def __len__(self) -> int:
+        return len(self.pull_requests())
+
 
 def get_pull_requests(
-    org: str, repo: str, github_api_token: str, offset: int, size: int
+    org: str, repo: str, github_api_token: str, page: int, per_page: int
 ) -> requests.models.Response | PullRequests:
     resp = requests.get(
         f"https://api.github.com/repos/{org}/{repo}/pulls",
-        params={"state": "all", "direction": "asc", "page": offset, "per_page": size},
+        params={
+            "state": "all",
+            "direction": "asc",
+            "page": page,
+            "per_page": per_page,
+        },
         headers={
             "accept": "application/vnd.github.full+json",
             "authorization": f"Bearer {github_api_token}",
