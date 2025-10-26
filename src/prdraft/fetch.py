@@ -1,4 +1,5 @@
 import typing
+from prdraft.pullrequest.storage import pull_request_storage
 
 
 class Args(typing.Protocol):
@@ -9,4 +10,9 @@ class Args(typing.Protocol):
     github_api_key: str
 
 
-def run(args: Args) -> int: ...
+def run(args: Args) -> int:
+    with pull_request_storage(args.database) as pr_storage:
+        pr_storage
+        ...
+
+    return 0
