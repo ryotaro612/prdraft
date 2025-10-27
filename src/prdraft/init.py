@@ -37,7 +37,7 @@ def _init_db(conn: duckdb.DuckDBPyConnection) -> None:
 
     create table if not exists github_pull_request (
       repository_id uuid not null,
-      pull_request_id  integer not null,
+      pull_request_id  bigint not null,
       source json not null,
       unique(repository_id, pull_request_id),
       foreign key(repository_id) references github_repository(repository_id)
@@ -52,7 +52,7 @@ def _init_db(conn: duckdb.DuckDBPyConnection) -> None:
 
     create table if not exists pull_request_embedding(
         repository_id uuid not null,
-        pull_request_id integer not null,
+        pull_request_id bigint not null,
         model_id varchar not null,
         unique(repository_id, pull_request_id, model_id),
         embedding float[4096] not null,

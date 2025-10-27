@@ -7,8 +7,6 @@ import sys
 
 def main():
     """The entrypoint"""
-    # if len(sys.argv) == 1:
-    #     args.parse(["--help"])
     sys.exit(_main(sys.argv[1:]))
 
 
