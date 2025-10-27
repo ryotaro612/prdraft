@@ -8,20 +8,26 @@ import prdraft.init as init
 class TestInterpretCommandLineArguments(unittest.TestCase):
 
     def test_init_is_a_command(self):
-        res = args.parse(["init", "prdraft.db"])
-        self.assertEqual("prdraft.db", res.database)
+        res = args.Parser().parse(["init", "prdraft.db"])
+        if res:
+            self.assertEqual("prdraft.db", res.database)
+        else:
+            self.fail("parsed args is None")
 
         self.assertEqual("init", res.command)
         self.assertFalse(res.verbose, "verbose is off by default")
 
     def test_verbose_mode_is_available(self):
-        res = args.parse(["--verbose", "init", "prdraft.db"])
-        self.assertTrue(res.verbose)
+        res = args.Parser().parse(["--verbose", "init", "prdraft.db"])
+        if res:
+            self.assertTrue(res.verbose)
+        else:
+            self.fail("parsed args is None")
 
     def test_pr_fetch_is_a_sub_command(self):
         os.getenv = MagicMock(return_value="fake_token")
 
-        res = args.parse(["pr", "fetch", "prdraft.db", "owner/repo"])
+        res = args.Parser().parse(["pr", "fetch", "prdraft.db", "owner/repo"])
         if not isinstance(res, args.PrFetchArgs):
             self.fail("parsed args is not an instance of PrFetchArgs")
 

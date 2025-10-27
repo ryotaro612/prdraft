@@ -1,4 +1,0 @@
-content-length: 372
-content-type: application/json
-
-{"jsonrpc": "2.0", "params": {"cwd": "/Users/ryotaro/ryotaro612/prdraft", "status": "success", "result": {"test_prdraft.test_args.TestInterpretCommandLineArguments.test_pr_fetch_is_a_sub_command": {"test": "test_prdraft.test_args.TestInterpretCommandLineArguments.test_pr_fetch_is_a_sub_command", "outcome": "success", "message": "", "traceback": null, "subtest": null}}}}

@@ -7,11 +7,17 @@ import sys
 
 def main():
     """The entrypoint"""
+    # if len(sys.argv) == 1:
+    #     args.parse(["--help"])
     sys.exit(_main(sys.argv[1:]))
 
 
 def _main(arguments: list[str]) -> int:
-    options = args.parse(arguments)
+    parser = args.Parser()
+    options = parser.parse(arguments)
+    if options is None:
+        parser.print_help()
+        return 1
     if options.verbose:
         logging.basicConfig(level=logging.DEBUG)
 
@@ -22,9 +28,9 @@ def _main(arguments: list[str]) -> int:
         if options.subcommand == "fetch":
             return_code = fetch.run(options)
         else:
-            args.parse(["--help"])
-            return 0
+            parser.print_help()
+            return 1
     else:
-        args.parse(["--help"])
-        return 0
+        parser.print_help()
+        return 1
     return return_code

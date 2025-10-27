@@ -1,7 +1,7 @@
 ##@ Run
 
 ##@ Test
-test:
+test: ## Run tests.
 	uv run pyright
 	uv run python -m unittest
 	
