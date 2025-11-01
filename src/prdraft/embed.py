@@ -9,9 +9,7 @@ import prdraft.repository as r
 
 
 def run(args: args.PrEmbedArgs) -> int:
-    print(args.model)
     embeddings = HuggingFaceEmbeddings(model_name=args.model)
-    print(args.model + "####")
     repo = git.Repo(args.repository)
 
     org, repo_name = _determine_repository_id(repo.remotes.origin.url)

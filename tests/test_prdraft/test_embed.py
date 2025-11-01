@@ -34,7 +34,7 @@ class EmbedTest(unittest.TestCase):
                     "embed",
                     git_repository,
                     db,
-                    "sentence-transformers/stsb-mpnet-base-v2",
+                    "ibm-granite/granite-embedding-107m-multilingual",
                 ]
             )
             self.assertEqual(0, rtn_code)
