@@ -13,6 +13,7 @@ def run(args: args.PrEmbedArgs) -> int:
     repo = git.Repo(args.repository)
 
     org, repo_name = _determine_repository_id(repo.remotes.origin.url)
+    print(org, repo_name)
     with duckdb.connect(args.database) as conn:
         count = 0
         for batch in itertools.batched(
@@ -45,4 +46,4 @@ def run(args: args.PrEmbedArgs) -> int:
 
 def _determine_repository_id(git_url: str) -> tuple[str, str]:
     org_name, repo_name = git_url.split(":")[1].split("/")
-    return org_name, repo_name
+    return org_name, repo_name[:-4]

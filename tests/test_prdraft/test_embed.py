@@ -1,6 +1,6 @@
 import unittest
-import os
 import os.path as path
+import prdraft.embed as embed
 import duckdb
 import uuid
 import prdraft
@@ -38,3 +38,16 @@ class EmbedTest(unittest.TestCase):
                 ]
             )
             self.assertEqual(0, rtn_code)
+
+
+class ExtractOwnerAndRepoNameFromGitUrlTest(unittest.TestCase):
+
+    def test_extract_owner_and_repo_from_git_url(self):
+        org, repo = embed._determine_repository_id(
+            "git@github.com:ryotaro612/prdraft.git"
+        )
+        self.assertEqual("ryotaro612", org)
+        self.assertEqual("prdraft", repo)
+
+
+#
