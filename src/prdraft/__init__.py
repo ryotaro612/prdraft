@@ -2,6 +2,7 @@ import prdraft.args as args
 import logging
 import prdraft.init as init
 import prdraft.fetch as fetch
+import prdraft.embed as embed
 import sys
 
 
@@ -25,6 +26,8 @@ def _main(arguments: list[str]) -> int:
     elif options.command == "pr":
         if options.subcommand == "fetch":
             return_code = fetch.run(options)
+        elif options.subcommand == "embed":
+            return_code = embed.run(options)
         else:
             parser.print_help()
             return 1

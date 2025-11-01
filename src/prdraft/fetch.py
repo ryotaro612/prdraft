@@ -1,3 +1,5 @@
+""" """
+
 import duckdb
 import uuid
 import logging

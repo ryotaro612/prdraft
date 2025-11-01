@@ -1,6 +1,7 @@
 import argparse
 import os
 import typing
+import logging
 
 
 @typing.runtime_checkable
@@ -22,24 +23,42 @@ class PrFetchArgs(typing.Protocol):
     github_api_key: str
 
 
+@typing.runtime_checkable
+class PrEmbedArgs(typing.Protocol):
+    verbose: bool
+    command: typing.Literal["pr"]
+    subcommand: typing.Literal["embed"]
+    repository: str
+    database: str
+    model: str
+
+
 class Parser:
 
     def __init__(self) -> None:
         self._parser = _make_parser()
 
-    def parse(self, args: list[str]) -> InitArgs | PrFetchArgs | None:
+    def parse(self, args: list[str]) -> InitArgs | PrFetchArgs | PrEmbedArgs | None:
         """Parses command line arguments."""
         parsed_args = self._parser.parse_args(args)
         if parsed_args.command == "init" and isinstance(parsed_args, InitArgs):
             return parsed_args
 
-        if parsed_args.command == "pr" and parsed_args.subcommand == "fetch":
-            token = os.getenv("PRDRAFT_GITHUB_TOKEN", None)
-            if not token:
-                raise ValueError("PRDRAFT_GITHUB_TOKEN environment variable is not set")
-            parsed_args.github_api_key = token
-            if isinstance(parsed_args, PrFetchArgs):
-                return parsed_args
+        if parsed_args.command == "pr":
+            if parsed_args.subcommand == "fetch":
+                token = os.getenv("PRDRAFT_GITHUB_TOKEN", None)
+                if not token:
+                    raise ValueError(
+                        "PRDRAFT_GITHUB_TOKEN environment variable is not set"
+                    )
+                parsed_args.github_api_key = token
+                if isinstance(parsed_args, PrFetchArgs):
+                    return parsed_args
+
+            if parsed_args.subcommand == "embed":
+                if isinstance(parsed_args, PrEmbedArgs):
+                    return parsed_args
+        logging.error("Failed to parse command line arguments.")
 
     def print_help(self) -> None:
         self._parser.print_help()
@@ -82,10 +101,27 @@ def _define_pr(parser: argparse.ArgumentParser) -> None:
     )
     fetch_parser.add_argument(
         "database",
-        default="prdraft.db",
         help="A DuckDB database file",
     )
     fetch_parser.add_argument(
         "ghrepo",
         help="The GitHub repository to fetch data from. The format is owner/repo.",
+    )
+
+    embed_parser = subparsers.add_parser(
+        "embed", help="generate embeddings for pull requests using a specified model."
+    )
+
+    embed_parser.add_argument(
+        "repository",
+        help="A local Git repository path",
+    )
+    embed_parser.add_argument(
+        "database",
+        help="A DuckDB database file that contains pull requests.",
+    )
+
+    embed_parser.add_argument(
+        "model",
+        help="A Hugging Face model name. Use the model to embed pull request texts.",
     )

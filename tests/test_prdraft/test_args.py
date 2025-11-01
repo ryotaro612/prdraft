@@ -37,3 +37,22 @@ class TestInterpretCommandLineArguments(unittest.TestCase):
         self.assertEqual("owner/repo", res.ghrepo)
         self.assertEqual("fake_token", res.github_api_key)
         os.getenv.assert_called_with("PRDRAFT_GITHUB_TOKEN", None)
+
+    def test_embed_is_a_sub_command(self):
+        res = args.Parser().parse(
+            [
+                "pr",
+                "embed",
+                "my-repo",
+                "prdraft.db",
+                "ibm-granite/granite-embedding-107m-multilingual",
+            ]
+        )
+        if not isinstance(res, args.PrEmbedArgs):
+            self.fail("parsed args is not an instance of PrEmbedArgs")
+
+        self.assertFalse(res.verbose)
+        self.assertEqual("pr", res.command)
+        self.assertEqual("embed", res.subcommand)
+        self.assertEqual("prdraft.db", res.database)
+        self.assertEqual("ibm-granite/granite-embedding-107m-multilingual", res.model)

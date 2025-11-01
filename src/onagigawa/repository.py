@@ -2,7 +2,7 @@ import git
 import typing
 
 
-def make_diff_summary(repo: git.Repo, base: str, head: str):
+def make_diff_summary(repo: git.Repo, base: str, head: str) -> str:
     messages = _get_commit_messages(repo, base, head)
     diffs = _get_diff(repo, base, head)
     return _render_md(messages, diffs)
