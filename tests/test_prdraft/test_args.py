@@ -1,5 +1,6 @@
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
+
 import os
 import prdraft.args as args
 import prdraft.init as init
@@ -24,8 +25,9 @@ class TestInterpretCommandLineArguments(unittest.TestCase):
         else:
             self.fail("parsed args is None")
 
-    def test_pr_fetch_is_a_sub_command(self):
-        os.getenv = MagicMock(return_value="fake_token")
+    @patch("os.getenv")
+    def test_pr_fetch_is_a_sub_command(self, mock_getenv):
+        mock_getenv.return_value = "fake_token"
 
         res = args.Parser().parse(["pr", "fetch", "prdraft.db", "owner/repo"])
         if not isinstance(res, args.PrFetchArgs):
@@ -36,7 +38,7 @@ class TestInterpretCommandLineArguments(unittest.TestCase):
         self.assertEqual("fetch", res.subcommand)
         self.assertEqual("owner/repo", res.ghrepo)
         self.assertEqual("fake_token", res.github_api_key)
-        os.getenv.assert_called_with("PRDRAFT_GITHUB_TOKEN", None)
+        mock_getenv.assert_called_with("PRDRAFT_GITHUB_TOKEN", None)
 
     def test_embed_is_a_sub_command(self):
         res = args.Parser().parse(
