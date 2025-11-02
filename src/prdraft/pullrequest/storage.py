@@ -1,4 +1,5 @@
 import duckdb
+import json
 import typing
 import prdraft.pullrequest.github as gh
 import uuid
@@ -56,8 +57,8 @@ def find_not_embeded_pull_requests(
     repository_org: str,
     repository_name: str,
     model_id: str,
-) -> typing.Iterator[gh.PullRequest]:
-    rows = conn.execute(
+) -> typing.Generator[gh.PullRequest]:
+    cur = conn.execute(
         """
     select pr.source
     from github_pull_request pr
@@ -75,9 +76,12 @@ def find_not_embeded_pull_requests(
             "repository_name": repository_name,
         },
     )
-
-    for row in rows.fetchmany():
-        yield gh.PullRequest(row[0])
+    while True:
+        fetched_pr = cur.fetchone()
+        if fetched_pr:
+            yield gh.PullRequest(json.loads(fetched_pr[0]))
+        else:
+            return
 
 
 class EmbeddedPullRequest:

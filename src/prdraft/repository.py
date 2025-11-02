@@ -155,10 +155,10 @@ def _render_md(messages: list[str], diffs: list[_Diff]) -> str:
                 md += f"filepath: `{a_path}`"
             else:
                 md += f"renamed from `{a_path}` to `{b_path}`"
-
-            md += "\n\ndiff:\n\n"
-            for line in diff.splitlines():
-                md += f"    {line}\n"
+            if _is_display_diff_file(b_path):
+                md += "\n\ndiff:\n\n"
+                for line in diff.splitlines():
+                    md += f"    {line}\n"
             md += "\n"
 
     md += "\n## Added files\n\n"
@@ -166,9 +166,10 @@ def _render_md(messages: list[str], diffs: list[_Diff]) -> str:
         if added:
             filepath, diff = added
             md += f"filepath: `{filepath}`\n\n"
-            md += "diff:\n\n"
-            for line in diff.splitlines():
-                md += f"    {line}\n"
+            if _is_display_diff_file(filepath):
+                md += "diff:\n\n"
+                for line in diff.splitlines():
+                    md += f"    {line}\n"
             md += "\n"
 
     md += "\n## Commit messages\n\n"
@@ -176,6 +177,10 @@ def _render_md(messages: list[str], diffs: list[_Diff]) -> str:
         md += f"### Message {i + 1}\n\n"
         for line in message.splitlines():
             md += f"    {line}\n"
-        md += "\n"
+        md += "\n\n"
 
     return md
+
+
+def _is_display_diff_file(filename: str) -> bool:
+    return not filename.endswith(".svg")

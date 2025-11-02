@@ -4,6 +4,7 @@ from prdraft.pullrequest.storage import (
     save_embedded_pull_request,
     EmbeddedPullRequest,
 )
+from prdraft.pullrequest.summary import make_summary
 from prdraft.pullrequest.github import get_pull_requests, PullRequests, PullRequest
 
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
     "PullRequest",
     "find_not_embeded_pull_requests",
     "save_embedded_pull_request",
+    "make_summary",
 ]
