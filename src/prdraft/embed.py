@@ -1,7 +1,7 @@
 import prdraft.args as args
 import logging
 import git
-from langchain_huggingface.embeddings import HuggingFaceEmbeddings
+import ollama
 from transformers import AutoTokenizer
 import duckdb
 import prdraft.pullrequest as pr
@@ -9,23 +9,29 @@ import prdraft.repository as r
 
 
 def run(args: args.PrEmbedArgs) -> int:
-    embeddings = HuggingFaceEmbeddings(model_name=args.model)
     repo = git.Repo(args.repository)
-    tokenizer = AutoTokenizer.from_pretrained(args.model)
 
     org, repo_name = _determine_repository_id(repo.remotes.origin.url)
-    with duckdb.connect(args.database) as conn:
-        conn.execute("load vss")
+    with (
+        duckdb.connect(args.database) as conn0,
+        duckdb.connect(args.database) as conn1,
+    ):
+        for c in [conn0, conn1]:
+            c.execute("load vss")
 
         count = 0
         for pullreq in pr.find_not_embeded_pull_requests(
-            conn, org, repo_name, args.model
+            conn0, org, repo_name, args.model
         ):
             if not pullreq.merged:
                 continue
 
             diff_text = pr.make_summary(
-                repo, pullreq.base_sha, pullreq.head_sha, _Tokenizer(tokenizer), 4000
+                repo,
+                pullreq.base_sha,
+                pullreq.head_sha,
+                _Tokenizer(model_name=args.model),
+                4000,
             )
             print(diff_text)
 
@@ -56,8 +62,11 @@ def _determine_repository_id(git_url: str) -> tuple[str, str]:
 
 class _Tokenizer:
 
-    def __init__(self, inner):
-        self._inner = inner
+    def __init__(self, model_name: str):
+        self._model_name = model_name
 
     def count_tokens(self, text: str) -> int:
-        return len(self._inner(text)["input_ids"])
+        count = ollama.embed(model=self._model_name, input=text).prompt_eval_count
+        if count is None:
+            raise ValueError("Failed to get token count from Ollama")
+        return count

@@ -20,6 +20,10 @@ def run(args: args.InitArgs) -> int:
 
 
 def _init_db(conn: duckdb.DuckDBPyConnection) -> None:
+    """
+    vss extension does not support delete and update records.
+    https://duckdb.org/docs/stable/core_extensions/vss#persistence
+    """
     conn.execute(
         """
     create table if not exists migration (
@@ -43,13 +47,6 @@ def _init_db(conn: duckdb.DuckDBPyConnection) -> None:
       foreign key(repository_id) references github_repository(repository_id)
     );
 
-    create table if not exists huggingface_model(
-      model_id varchar PRIMARY KEY
-    );
-    install vss;
-    load vss;
-    SET hnsw_enable_experimental_persistence = true;
-
     create table if not exists pull_request_embedding(
         repository_id uuid not null,
         pull_request_id bigint not null,
@@ -58,6 +55,5 @@ def _init_db(conn: duckdb.DuckDBPyConnection) -> None:
         embedding float[4096] not null,
         text varchar not null
     );
-    CREATE INDEX IF NOT EXISTS pull_request_embedding_idx ON pull_request_embedding USING HNSW (embedding);
     """
     )

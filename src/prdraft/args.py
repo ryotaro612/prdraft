@@ -123,5 +123,5 @@ def _define_pr(parser: argparse.ArgumentParser) -> None:
 
     embed_parser.add_argument(
         "model",
-        help="A Hugging Face model name. Use the model to embed pull request texts.",
+        help="An Ollama model name. Use the model to embed pull request texts.",
     )
