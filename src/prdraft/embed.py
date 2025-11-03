@@ -31,24 +31,27 @@ def run(args: args.PrEmbedArgs) -> int:
                 pullreq.base_sha,
                 pullreq.head_sha,
                 _Tokenizer(model_name=args.model),
-                4000,
+                3500,
             )
-            print(diff_text)
+            logging.debug(f"Diff text length: {len(diff_text)}")
+            logging.debug(f"Diff text:\n{diff_text}")
+            raw_res = ollama.embed(model=args.model, input=diff_text)
+            res = raw_res.embeddings
+            logging.debug(f"embeedding prompt tokens: {raw_res.prompt_eval_count}")
 
-            # diff_embeddings = embeddings.embed_documents([diff_text])[0]
-            # pr.save_embedded_pull_request(
-            #     conn,
-            #     org,
-            #     repo_name,
-            #     args.model,
-            #     [
-            #         pr.EmbeddedPullRequest(
-            #             pull_request_id=pullreq.id,
-            #             embedded=diff_embeddings,
-            #             text=diff_text,
-            #         )
-            #     ],
-            # )
+            pr.save_embedded_pull_request(
+                conn1,
+                org,
+                repo_name,
+                args.model,
+                [
+                    pr.EmbeddedPullRequest(
+                        pull_request_id=pullreq.id,
+                        embedded=res[0],
+                        text=diff_text,
+                    )
+                ],
+            )
             count += 1
             logging.debug(f"processed {count} pull requests")
 
@@ -66,7 +69,16 @@ class _Tokenizer:
         self._model_name = model_name
 
     def count_tokens(self, text: str) -> int:
-        count = ollama.embed(model=self._model_name, input=text).prompt_eval_count
-        if count is None:
-            raise ValueError("Failed to get token count from Ollama")
-        return count
+        # truncate: If true, truncate inputs that exceed the context window. If false, returns an error.
+        # https://docs.ollama.com/api/embed
+        logging.debug(f"Counting tokens for text of length {len(text)}")
+        try:
+            count = ollama.embed(
+                model=self._model_name, input=text, truncate=False
+            ).prompt_eval_count
+            if isinstance(count, int):
+                return count
+        except Exception as e:
+            logging.debug(f"Error counting tokens: {e}")
+
+        return 10000000

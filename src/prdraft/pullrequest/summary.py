@@ -95,7 +95,7 @@ def make_summary(
     if meta_deleted or diff_deleted:
         summary_md += "## Deleted files\n"
         for d in diff_deleted:
-            summary_md += f"path: {d.diff.a_path}\n"
+            summary_md += f"path: {d.diff.a_path}  \n"
             text = d.diff_text()
             if text is None:
                 raise ValueError("diff text does not exist")
@@ -103,12 +103,12 @@ def make_summary(
             for line in text.splitlines():
                 summary_md += f"    {line}\n"
         for d in meta_deleted:
-            summary_md += f"path: {d.diff.a_path}\n"
+            summary_md += f"path: {d.diff.a_path}  \n"
 
     if meta_added or diff_added:
         summary_md += "## Added files\n"
         for d in diff_added:
-            summary_md += f"path: {d.diff.b_path}\n"
+            summary_md += f"path: {d.diff.b_path}  \n"
             text = d.diff_text()
             if text is None:
                 raise ValueError("diff text does not exist")
@@ -116,14 +116,14 @@ def make_summary(
             for line in text.splitlines():
                 summary_md += f"    {line}\n"
         for d in meta_added:
-            summary_md += f"path: {d.diff.b_path}\n"
+            summary_md += f"path: {d.diff.b_path}  \n"
 
     if meta_modified or diff_modified:
         summary_md += "## Modified files\n"
         for d in diff_modified:
             if d.diff.a_path != d.diff.b_path:
                 raise ValueError("Unexpected path change in modified files")
-            summary_md += f"path: {d.diff.a_path}\n"
+            summary_md += f"path: {d.diff.a_path}  \n"
             text = d.diff_text()
             if text is None:
                 raise ValueError("diff text does not exist")
@@ -133,7 +133,7 @@ def make_summary(
         for d in meta_modified:
             if d.diff.a_path != d.diff.b_path:
                 raise ValueError("Unexpected path change in modified files")
-            summary_md += f"path: {d.diff.a_path}\n"
+            summary_md += f"path: {d.diff.a_path}  \n"
 
     summary_md += "## Commit messages\n"
     for i, msg in enumerate(commit_messages):

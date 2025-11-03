@@ -1,4 +1,5 @@
 import duckdb
+import logging
 import json
 import typing
 import prdraft.pullrequest.github as gh
@@ -89,7 +90,7 @@ class EmbeddedPullRequest:
     def __init__(
         self,
         pull_request_id: int,
-        embedded: list[float],
+        embedded: typing.Sequence[float],
         text: str,
     ):
         self.pull_request_id = pull_request_id
@@ -112,6 +113,7 @@ def save_embedded_pull_request(
     if not record:
         return False
     repository_id = record[0]
+
     conn.executemany(
         """
     insert into pull_request_embedding(repository_id, pull_request_id, model_id, embedding, text)
