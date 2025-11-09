@@ -1,17 +1,16 @@
 import prdraft.args as args
+from mcp.server.session import ServerSession
 from collections.abc import (
-    AsyncIterator,
-    Awaitable,
     Callable,
-    Collection,
-    Iterable,
-    Sequence,
 )
 import typing
-from collections.abc import AsyncIterator, Callable
+import duckdb
+from collections.abc import Callable
+import git
 from contextlib import AbstractAsyncContextManager
 from mcp.server.fastmcp import Context, FastMCP
-from mcp.server.lowlevel.server import Server as MCPServer
+import prdraft.pullrequest.summary as summary
+import prdraft.tokenizer as t
 
 
 def run(args: args.McpArgs) -> int:
@@ -21,7 +20,14 @@ def run(args: args.McpArgs) -> int:
 
 
 def make_server(args: args.McpArgs) -> FastMCP:
-    return FastMCP("mcp server", lifespan=make_lifespan(args))
+    mcp = FastMCP("mcp server", lifespan=make_lifespan(args))
+    mcp.add_tool(
+        query_diff_markdown_tool,
+        "query_diff_markdown",
+        "make a markdown that summarizes a specified revision",
+        description="This tool generates a markdown summary for a specific revision to describe a pull request",
+    )
+    return mcp
 
 
 class AppContext:
@@ -44,9 +50,9 @@ class LifespanContextManager(AbstractAsyncContextManager[AppContext]):
 
     async def __aexit__(
         self,
-        exc_type,
-        exc_value,
-        traceback,
+        _exc_type,
+        _exc_value,
+        _traceback,
     ) -> None:
         # https://docs.python.org/ja/3.13/reference/datamodel.html#object.__exit__
         ...
@@ -56,3 +62,15 @@ def make_lifespan(
     args: args.McpArgs,
 ) -> Callable[[FastMCP[AppContext]], LifespanContextManager]:
     return lambda _: LifespanContextManager(args.database, args.repository)
+
+
+def query_diff_markdown_tool(
+    revision: str, ctx: Context[ServerSession, AppContext]
+) -> str:
+    app_context = ctx.request_context.lifespan_context
+    tokenizer = t.Tokenizer(model_name="qwen3-embedding:8b")
+
+    repo = git.Repo(app_context.repository)
+    markdown = summary.make_summary(repo, "main", revision, tokenizer, 3500)
+    return markdown
+    # Do something with tokens

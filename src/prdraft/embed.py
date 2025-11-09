@@ -6,6 +6,7 @@ from transformers import AutoTokenizer
 import duckdb
 import prdraft.pullrequest as pr
 import prdraft.repository as r
+import prdraft.tokenizer as tokenizer
 
 
 def run(args: args.PrEmbedArgs) -> int:
@@ -30,14 +31,12 @@ def run(args: args.PrEmbedArgs) -> int:
                 repo,
                 pullreq.base_sha,
                 pullreq.head_sha,
-                _Tokenizer(model_name=args.model),
+                tokenizer.Tokenizer(model_name=args.model),
                 3500,
             )
-            logging.debug(f"Diff text length: {len(diff_text)}")
-            logging.debug(f"Diff text:\n{diff_text}")
+
             raw_res = ollama.embed(model=args.model, input=diff_text)
             res = raw_res.embeddings
-            logging.debug(f"embeedding prompt tokens: {raw_res.prompt_eval_count}")
 
             pr.save_embedded_pull_request(
                 conn1,
@@ -61,24 +60,3 @@ def run(args: args.PrEmbedArgs) -> int:
 def _determine_repository_id(git_url: str) -> tuple[str, str]:
     org_name, repo_name = git_url.split(":")[1].split("/")
     return org_name, repo_name[:-4]
-
-
-class _Tokenizer:
-
-    def __init__(self, model_name: str):
-        self._model_name = model_name
-
-    def count_tokens(self, text: str) -> int:
-        # truncate: If true, truncate inputs that exceed the context window. If false, returns an error.
-        # https://docs.ollama.com/api/embed
-        logging.debug(f"Counting tokens for text of length {len(text)}")
-        try:
-            count = ollama.embed(
-                model=self._model_name, input=text, truncate=False
-            ).prompt_eval_count
-            if isinstance(count, int):
-                return count
-        except Exception as e:
-            logging.debug(f"Error counting tokens: {e}")
-
-        return 10000000

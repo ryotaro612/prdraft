@@ -12,6 +12,7 @@ class TokenCounter(typing.Protocol):
 def make_summary(
     repo: git.Repo, base: str, head: str, tokenizer: TokenCounter, token_limit: int
 ):
+    """Summarize the changes in a pull request."""
     commit_messages, current_tokens = _select_commit_messages(
         repo, base, head, tokenizer, token_limit
     )
