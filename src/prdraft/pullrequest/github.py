@@ -7,6 +7,7 @@ class _RawPullRequest(typing.TypedDict):
     id: int
     number: int
     title: str
+    body: str
     merged_at: str | None
     head: dict
     base: dict
@@ -20,6 +21,10 @@ class PullRequest:
     @property
     def title(self) -> str:
         return self._raw["title"]
+
+    @property
+    def body(self) -> str:
+        return self._raw["body"]
 
     @property
     def id(self) -> int:

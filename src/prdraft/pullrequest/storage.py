@@ -125,3 +125,42 @@ def save_embedded_pull_request(
         ],
     )
     return True
+
+
+def find_similar_pull_requests(
+    conn: duckdb.DuckDBPyConnection,
+    owner: str,
+    repo_name: str,
+    model_name: str,
+    pull_request_embedding: typing.Sequence[float],
+    top_k: int,
+) -> typing.Generator[typing.Tuple[gh.PullRequest, str]]:
+    sql = """
+    select pre.text, pre.source
+    from pull_request_embedding pre
+    join github_repository r
+    on pre.repository_id = r.repository_id
+    join github_pull_request pr
+    on pre.pull_request_id = pr.pull_request_id
+    where r.owner_name = $owner and r.repository_name = $repo_name and pre.model_id = $model_name
+    order by array_cosine_distance(pre.embedding, $pull_request_embedding::FLOAT[]) limit $top_k
+    """
+    # "ORDER BY array_cosine_distance(diff_embedding, $embedding::FLOAT[4096]) limit 15
+    cursor = conn.execute(
+        sql,
+        {
+            "owner": owner,
+            "repo_name": repo_name,
+            "model_name": model_name,
+            "pull_request_embedding": pull_request_embedding,
+            "top_k": top_k,
+        },
+    )
+
+    while True:
+        record = cursor.fetchone()
+        if record is None:
+            break
+        markdown = record[0]
+        source = json.loads(record[1])
+        yield gh.PullRequest(source), markdown
