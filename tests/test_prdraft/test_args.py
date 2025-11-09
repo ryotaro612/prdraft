@@ -1,9 +1,7 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import patch
 
-import os
 import prdraft.args as args
-import prdraft.init as init
 
 
 class TestInterpretCommandLineArguments(unittest.TestCase):

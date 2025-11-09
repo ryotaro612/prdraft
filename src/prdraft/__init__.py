@@ -3,6 +3,7 @@ import logging
 import prdraft.init as init
 import prdraft.fetch as fetch
 import prdraft.embed as embed
+import prdraft.mcp as mcp
 import sys
 
 
@@ -31,6 +32,8 @@ def _main(arguments: list[str]) -> int:
         else:
             parser.print_help()
             return 1
+    elif options.command == "mcp":
+        return_code = mcp.run(options)
     else:
         parser.print_help()
         return 1

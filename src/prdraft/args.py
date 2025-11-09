@@ -33,12 +33,24 @@ class PrEmbedArgs(typing.Protocol):
     model: str
 
 
+@typing.runtime_checkable
+class McpArgs(typing.Protocol):
+    """Arguments for the mcp command."""
+
+    verbose: bool
+    command: typing.Literal["mcp"]
+    database: str
+    repository: str
+
+
 class Parser:
 
     def __init__(self) -> None:
         self._parser = _make_parser()
 
-    def parse(self, args: list[str]) -> InitArgs | PrFetchArgs | PrEmbedArgs | None:
+    def parse(
+        self, args: list[str]
+    ) -> InitArgs | PrFetchArgs | PrEmbedArgs | McpArgs | None:
         """Parses command line arguments."""
         parsed_args = self._parser.parse_args(args)
         if parsed_args.command == "init" and isinstance(parsed_args, InitArgs):
@@ -58,6 +70,8 @@ class Parser:
             if parsed_args.subcommand == "embed":
                 if isinstance(parsed_args, PrEmbedArgs):
                     return parsed_args
+        if parsed_args.command == "mcp" and isinstance(parsed_args, McpArgs):
+            return parsed_args
         logging.error("Failed to parse command line arguments.")
 
     def print_help(self) -> None:
@@ -78,6 +92,10 @@ def _make_parser() -> argparse.ArgumentParser:
 
     pr_parser = subparsers.add_parser("pr", help="process pull requests")
     _define_pr(pr_parser)
+
+    mcp_parser = subparsers.add_parser("mcp", help="serve a mcp server")
+    _define_mcp(mcp_parser)
+
     return parser
 
 
@@ -124,4 +142,19 @@ def _define_pr(parser: argparse.ArgumentParser) -> None:
     embed_parser.add_argument(
         "model",
         help="An Ollama model name. Use the model to embed pull request texts.",
+    )
+
+
+def _define_mcp(parser: argparse.ArgumentParser) -> None:
+    """Defines mcp subcommand parser."""
+    parser.add_argument(
+        "database",
+        default="prdraft.db",
+        help="A DuckDB database file",
+    )
+
+    parser.add_argument(
+        "repository",
+        default="repository",
+        help="A local Git repository path",
     )
